@@ -1,0 +1,30 @@
+<a href="/logout"><h2>Log Out</h2></a>
+<h1>Hi <%= @user.name%>!</h1>
+<br>
+<form action="/posts" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <textarea name="content" rows="3" cols="60" placeholder="Post something witty here..."></textarea>
+  <input type="submit" value="Idea!">
+</form>
+<div class="all_posts">
+  <% @posts.each do |post| %>
+    <div class="post">
+      <p><a href="/users/<%=post.user.id%>"><%= post.user.alias %></a> says: <%= post.content%></p>
+        <form action="/likes" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="post_id" value="<%= post.id %>">
+          <input type="submit" name="name" value="Like">
+        </label>
+      </form>
+      <% if current_user.id == post.user.id %>
+        <form action="/delete" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="post_id" value="<%= post.id %>">
+          <input type="hidden" name="_method" value="delete">
+          <input type="submit" name="name" value="Delete">
+        </form>
+      <% end %>
+      <p><a href="bright_ideas/<%= post.id %>"><%= post.likes.count %> people</a> like this</p>
+    </div>
+  <% end %>
+</div>
